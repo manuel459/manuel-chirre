@@ -1,12 +1,12 @@
 import { IProductosRepository } from "src/infraestructure/interfaces/IProductosRepository";
-import { ResponseHandler } from "../IResponse";
+import { IResponse, ResponseHandler } from "../IResponse";
 
 export class ProductosServices {
     constructor(private _productosRepository: IProductosRepository){
 
     }
 
-    async getAll(sku: string, nombre:string){
+    async getAll(sku: string, nombre:string): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
             const result = await this._productosRepository.getAll(sku, nombre);

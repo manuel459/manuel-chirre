@@ -1,7 +1,7 @@
 import { UserRepository } from "src/infraestructure/repository/UsersRepository";
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserObject } from "../dto/CreateUserObject";
-import { ResponseHandler } from "../IResponse";
+import { IResponse, ResponseHandler } from "../IResponse";
 import { hash } from 'bcrypt'
 import { HttpException } from "@nestjs/common";
 
@@ -10,7 +10,7 @@ export class UserServices {
 
     }
 
-    async insert(create: CreateUserObject){
+    async insert(create: CreateUserObject): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
             create.password = await hash(create.password, 10);
@@ -23,7 +23,7 @@ export class UserServices {
         }
     }
 
-    async getAll(rol: string){
+    async getAll(rol: string): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
             const result = await this._userRepository.getAll(rol);

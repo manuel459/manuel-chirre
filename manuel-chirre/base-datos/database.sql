@@ -50,7 +50,6 @@ CREATE TABLE public.productos (
 
 CREATE TABLE public.usuarios (
 	id serial4 NOT NULL,
-	codigotrabajador varchar(255) NOT NULL,
 	nombre varchar(255) NOT NULL,
 	correo varchar(255) NOT NULL,
 	telefono varchar(255) NOT NULL,
@@ -63,17 +62,17 @@ CREATE TABLE public.usuarios (
 
 
 INSERT INTO public.usuarios
-(codigotrabajador, nombre, correo, telefono, puesto, rol, "password")
-VALUES('CT001', 'Juan Pérez', 'juan@example.com', '123456789', 'Gerente de Tienda', 'ENCARGADO', '$2b$10$29uC.rfylfX21QE7hdeYduajhFy.7CIat8VXl7v9a65zJYvCwV6s2');
+(nombre, correo, telefono, puesto, rol, "password")
+VALUES('Juan Pérez', 'juan@example.com', '123456789', 'Gerente de Tienda', 'ENCARGADO', '$2b$10$29uC.rfylfX21QE7hdeYduajhFy.7CIat8VXl7v9a65zJYvCwV6s2');
 INSERT INTO public.usuarios
-(codigotrabajador, nombre, correo, telefono, puesto, rol, "password")
-VALUES('CT002', 'María López', 'maria@example.com', '987654321', 'Vendedor', 'VENDEDOR', '$2b$10$19YA9QpUEOS5IZAmCnQkLO.wAZOEJKu8p6WMd.cnSwXSjHJMN145a');
+(nombre, correo, telefono, puesto, rol, "password")
+VALUES('María López', 'maria@example.com', '987654321', 'Vendedor', 'VENDEDOR', '$2b$10$19YA9QpUEOS5IZAmCnQkLO.wAZOEJKu8p6WMd.cnSwXSjHJMN145a');
 INSERT INTO public.usuarios
-(codigotrabajador, nombre, correo, telefono, puesto, rol, "password")
-VALUES('CT003', 'Carlos González', 'carlos@example.com', '555666777', 'Repartidor', 'REPARTIDOR', '$2b$10$7t5U1s8a46XKGyVADaInRu44XBdrSaDlfZ.48yQyBadicuAGALv4e');
+(nombre, correo, telefono, puesto, rol, "password")
+VALUES('Carlos González', 'carlos@example.com', '555666777', 'Repartidor', 'REPARTIDOR', '$2b$10$7t5U1s8a46XKGyVADaInRu44XBdrSaDlfZ.48yQyBadicuAGALv4e');
 INSERT INTO public.usuarios
-(codigotrabajador, nombre, correo, telefono, puesto, rol, "password")
-VALUES('CT004', 'Ana Martínez', 'ana@example.com', '111222333', 'Delivery', 'DELIVERY', '$2b$10$KXTnCYlfeyNF76ckmQT/huvn/14oBR9jA95Mkg5jFJoUUST.NEVT6');
+(nombre, correo, telefono, puesto, rol, "password")
+VALUES('Ana Martínez', 'ana@example.com', '111222333', 'Delivery', 'DELIVERY', '$2b$10$KXTnCYlfeyNF76ckmQT/huvn/14oBR9jA95Mkg5jFJoUUST.NEVT6');
 
 
 

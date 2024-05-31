@@ -1,6 +1,6 @@
 import { JwtService } from "@nestjs/jwt";
 import { IUserRepository } from "src/infraestructure/interfaces/IUserRepository";
-import { ResponseHandler } from "../IResponse";
+import { IResponse, ResponseHandler } from "../IResponse";
 import { HttpException, UnauthorizedException } from "@nestjs/common";
 import { UserObjectLogin } from "../dto/UserObjectLogin";
 import { compare } from 'bcrypt'
@@ -11,7 +11,7 @@ export class AuthServices {
 
     }
 
-    async login(usuario: UserObjectLogin){
+    async login(usuario: UserObjectLogin): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
             console.log('llego al servicios')

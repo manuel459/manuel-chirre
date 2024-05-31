@@ -3,10 +3,7 @@ import { IsIn, IsNotEmpty, IsOptional } from "class-validator";
 import { DELIVERY, ENCARGADO, REPARTIDOR, VENDEDOR } from "src/infraestructure/const/constantes";
 
 export class CreateUserObject {
-    @ApiProperty()
-    @IsNotEmpty()
-    codigotrabajador: string;
-
+    
     @ApiProperty()
     @IsNotEmpty()
     nombre: string;

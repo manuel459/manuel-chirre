@@ -1,7 +1,7 @@
 import { UserRepository } from "src/infraestructure/repository/UsersRepository";
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserObject } from "../dto/CreateUserObject";
-import { ResponseHandler } from "../IResponse";
+import { IResponse, ResponseHandler } from "../IResponse";
 import { hash } from 'bcrypt'
 import { HttpException } from "@nestjs/common";
 import { CreatePedidoObject } from "../dto/CreatePedidoObject";
@@ -17,7 +17,7 @@ export class PedidosServices {
 
     }
 
-    async getAll(nro_pedido: number){
+    async getAll(nro_pedido: number): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
             const result = await this._pedidosRepository.getAll(nro_pedido);
@@ -27,7 +27,7 @@ export class PedidosServices {
         }
     }
 
-    async create(create: CreatePedidoObject){
+    async create(create: CreatePedidoObject): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
             for(let item of create.lista_productos){
@@ -59,7 +59,7 @@ export class PedidosServices {
         }
     }
 
-    async update(update: UpdateProcessStateObject){
+    async update(update: UpdateProcessStateObject): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
             const pedido = await this._pedidosRepository.getById(update.numero_pedido);
