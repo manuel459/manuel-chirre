@@ -34,7 +34,12 @@ export class LoginComponent implements OnInit {
           duration: 2000
         });
       }
-    });
+    }, error => {
+      console.log(error)
+      this.snackBar.open(error.error.message, '', {
+        duration: 2000
+      });
+    })
   }
 
 }
