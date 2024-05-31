@@ -1,0 +1,51 @@
+<mat-form-field class="example-form-field" appearance="fill">
+    <mat-label>SKU (Ejm: SKU001)</mat-label>
+    <input matInput type="text" [(ngModel)]="sku">
+    <button *ngIf="sku" matSuffix mat-icon-button aria-label="Clear" (click)="sku=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-form-field class="example-form-field" appearance="fill">
+    <mat-label>Nombre</mat-label>
+    <input matInput type="text" [(ngModel)]="nombre">
+    <button *ngIf="nombre" matSuffix mat-icon-button aria-label="Clear" (click)="nombre=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <button matSuffix mat-icon-button  aria-label="Clear" (click)="filter()">
+    <mat-icon>search</mat-icon>
+  </button>
+
+  <button  matSuffix mat-icon-button  aria-label="Clear" (click)="getAll()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>SKU</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Etiquetas</th>
+        <th>Precio</th>
+        <th>Unidad de Medida</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos">
+        <td>{{ producto.sku }}</td>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.tipo }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let etiqueta of producto.etiquetas">{{ etiqueta }}</li>
+          </ul>
+        </td>
+        <td>{{ producto.precio }}</td>
+        <td>{{ producto.unidad_medida }}</td>
+      </tr>
+    </tbody>
+  </table>
+  

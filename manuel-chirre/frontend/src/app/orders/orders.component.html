@@ -1,0 +1,47 @@
+<mat-form-field class="example-form-field" appearance="fill">
+    <mat-label>Buscar</mat-label>
+    <input matInput type="text" [(ngModel)]="nro_pedido">
+    <button *ngIf="nro_pedido" matSuffix mat-icon-button aria-label="Clear" (click)="filter()">
+        <mat-icon>search</mat-icon>
+      </button>
+    <button *ngIf="nro_pedido" matSuffix mat-icon-button aria-label="Clear" (click)="nro_pedido=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <button matSuffix mat-icon-button aria-label="Clear" (click)="getAll()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>Número de Pedido</th>
+        <th>Lista de Productos</th>
+        <th>Fecha de Pedido</th>
+        <th>Fecha de Recepción</th>
+        <th>Fecha de Entrega</th>
+        <th>Vendedor Solicitante</th>
+        <th>Repartidor</th>
+        <th>Estado</th>
+        <th>Fecha de Despacho</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pedido of pedidos">
+        <td>{{ pedido.numero_pedido }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let sku of pedido.lista_productos">{{ sku }}</li>
+          </ul>
+        </td>
+        <td>{{ pedido.fecha_pedido | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>{{ pedido.fecha_recepcion | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>{{ pedido.fecha_entrega | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>{{ pedido.vendedor_solicitante }}</td>
+        <td>{{ pedido.repartidor }}</td>
+        <td>{{ pedido.estado }}</td>
+        <td>{{ pedido.fecha_despacho | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+      </tr>
+    </tbody>
+  </table>

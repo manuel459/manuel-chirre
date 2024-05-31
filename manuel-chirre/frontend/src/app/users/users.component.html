@@ -1,0 +1,38 @@
+
+    <mat-form-field appearance="fill">
+        <mat-label>Roles</mat-label>
+        <mat-select [(ngModel)]="filterRole" >
+          <mat-option *ngFor="let item of roles" [value]="item" (click)="getAll()">
+            {{item}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button  matSuffix mat-icon-button  aria-label="Clear" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Código Trabajador</th>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Puesto</th>
+        <th>Rol</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let worker of workers">
+        <td>{{ worker.id }}</td>
+        <td>{{ worker.codigotrabajador }}</td>
+        <td>{{ worker.nombre }}</td>
+        <td>{{ worker.correo }}</td>
+        <td>{{ worker.telefono }}</td>
+        <td>{{ worker.puesto }}</td>
+        <td>{{ worker.rol }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
