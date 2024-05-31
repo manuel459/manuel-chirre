@@ -73,6 +73,9 @@ VALUES('Carlos González', 'carlos@example.com', '555666777', 'Repartidor', 'REP
 INSERT INTO public.usuarios
 (nombre, correo, telefono, puesto, rol, "password")
 VALUES('Ana Martínez', 'ana@example.com', '111222333', 'Delivery', 'DELIVERY', '$2b$10$KXTnCYlfeyNF76ckmQT/huvn/14oBR9jA95Mkg5jFJoUUST.NEVT6');
+INSERT INTO public.usuarios
+(nombre, correo, telefono, puesto, rol, "password")
+VALUES('manolo', 'manuel@gmail.com', '992423122', 'vendedor', 'VENDEDOR', '$2b$10$/AJwtjMeLgw30QDaGUHTc.zxtxlz7jAwR3jOqV3swJYQDWhc11dZi');
 
 
 
@@ -96,4 +99,7 @@ VALUES('SKU005', 'Aceite de Oliva', 'Aceite', '{aceite,cocina,natural}', 6.80, '
 
 INSERT INTO public.pedidos
 (lista_productos, fecha_pedido, fecha_recepcion, fecha_entrega, vendedor_solicitante, repartidor, estado, fecha_despacho)
-VALUES('{SKU002,SKU001}', '2024-05-30 11:53:39.331', '2024-05-30 12:58:59.183', '2024-05-30 13:06:01.032', 5, 6, 'EN DELIVERY', '2024-05-30 13:01:59.853');
+VALUES('{SKU002,SKU001}', '2024-05-30 11:53:39.331', '2024-05-30 12:58:59.183', '2024-05-30 13:06:01.032', 5, 6, 'RECIBIDO', '2024-05-30 13:01:59.853');
+INSERT INTO public.pedidos
+(lista_productos, fecha_pedido, fecha_recepcion, fecha_entrega, vendedor_solicitante, repartidor, estado, fecha_despacho)
+VALUES('{SKU003,SKU004}', '2024-05-30 21:39:07.898', '2024-05-30 21:40:51.978', '2024-05-30 22:08:20.574', 5, 6, 'RECIBIDO', '2024-05-30 21:44:28.346');

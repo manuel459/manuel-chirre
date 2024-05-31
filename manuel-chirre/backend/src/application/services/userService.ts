@@ -4,15 +4,19 @@ import { CreateUserObject } from "../dto/CreateUserObject";
 import { IResponse, ResponseHandler } from "../IResponse";
 import { hash } from 'bcrypt'
 import { HttpException } from "@nestjs/common";
+import { IUserRepository } from "src/infraestructure/interfaces/IUserRepository";
 
 export class UserServices {
-    constructor(private readonly _userRepository: UserRepository){
+    constructor(private readonly _userRepository: IUserRepository){
 
     }
 
     async insert(create: CreateUserObject): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
+            const usuario = await this._userRepository.getUser(create.correo);
+            if(usuario) throw new HttpException('Usuario con correo ya existente', 404);
+
             create.password = await hash(create.password, 10);
             console.log('llego', create)
             const insert = await this._userRepository.insert(create);

@@ -23,7 +23,7 @@ export class PedidosServices {
             const result = await this._pedidosRepository.getAll(nro_pedido);
             return response.succest(200, 'consulta exitosa', result);
         }catch(error){
-            return response.error(error.state, error.message);
+            return response.error(error.status??400, error.message);
         }
     }
 
@@ -55,7 +55,7 @@ export class PedidosServices {
 
             return response.succest(200, 'Pedido registrado con exito', insert);   
         } catch (error) {
-            return response.error(error.state, error.message);
+            return response.error(error.status??400, error.message);
         }
     }
 
@@ -69,7 +69,7 @@ export class PedidosServices {
 
             const secuencia_entrante = lista_secuencia_estados.find(x => x.state == update.estado);
 
-            const body = { numero_pedido: update.numero_pedido }
+            const body = { numero_pedido: update.numero_pedido, estado: update.estado }
 
             if(secuencia_actual.id < secuencia_entrante.id && (secuencia_entrante.id - secuencia_actual.id) == 1){
                 switch(secuencia_entrante.state){
