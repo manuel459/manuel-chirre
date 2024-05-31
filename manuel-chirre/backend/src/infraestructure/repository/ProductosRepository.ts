@@ -8,10 +8,10 @@ export class ProductosRepository implements IProductosRepository {
     async getAll(sku: string, nombre: string){
         const query = this.knex('productos').select();
         if(sku && sku != 'null'){
-            query.whereRaw(`sku like '%${sku}%'`)
+            query.whereRaw(`LOWER(sku) like LOWER('%${sku}%')`)
         }
         if(nombre && nombre != 'null'){
-            query.orWhereRaw(`nombre like '%${nombre}%'`);
+            query.orWhereRaw(`LOWER(nombre) like LOWER('%${nombre}%')`);
         }
 
         return await query;
