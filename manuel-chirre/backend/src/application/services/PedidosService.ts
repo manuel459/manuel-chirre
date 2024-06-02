@@ -55,7 +55,7 @@ export class PedidosServices {
 
             console.log('el pedido', pedido)
 
-            if(!pedido.numero_pedido) throw new HttpException('No se registro el pedido', 404);
+            if(!pedido.numero_pedido) throw new HttpException('No se registro el pedido', 400);
 
             const createDetail = create.lista_productos;
 
@@ -65,7 +65,7 @@ export class PedidosServices {
 
             const idDetalle = await this._pedidosRepository.createDetail(createDetail);
 
-            if(!idDetalle) throw new HttpException('No se registro el detalle del pedido', 404);
+            if(!idDetalle) throw new HttpException('No se registro el detalle del pedido', 400);
 
             return response.succest(200, 'Pedido registrado con exito', pedido.numero_pedido);   
         } catch (error) {
@@ -77,7 +77,7 @@ export class PedidosServices {
         const response = new ResponseHandler();
         try {
             const pedido = await this._pedidosRepository.getById(update.numero_pedido);
-            if(!pedido) throw new HttpException('No se encontraron registros del pedido', 400);
+            if(!pedido) throw new HttpException('No se encontraron registros del pedido', 404);
 
             const secuencia_actual = lista_secuencia_estados.find(x => x.state == pedido.estado);
 
