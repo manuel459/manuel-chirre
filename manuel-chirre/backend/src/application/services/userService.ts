@@ -20,7 +20,7 @@ export class UserServices {
             create.password = await hash(create.password, 10);
             console.log('llego', create)
             const insert = await this._userRepository.insert(create);
-            if(!insert) throw new HttpException('No se registro usuario', 404);
+            if(!insert) throw new HttpException('No se registro usuario', 400);
             return response.succest(200, 'Usuario Creado', insert);   
         } catch (error) {
             return response.error(error.status, error.message);
