@@ -15,6 +15,10 @@ import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule} from '@angular/material/dialog';
+import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,8 @@ import {MatButtonModule} from '@angular/material/button';
     LoginComponent,
     UsersComponent,
     ProductsComponent,
-    OrdersComponent
+    OrdersComponent,
+    OrderDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +39,10 @@ import {MatButtonModule} from '@angular/material/button';
     MatSelectModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [ { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }, provideAnimations()],
   bootstrap: [AppComponent]

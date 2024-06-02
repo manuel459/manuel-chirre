@@ -13,4 +13,11 @@ export class OrdersService {
   getAll(params: any){
     return this.http.get<Response>(environment.dev+ 'pedidos', { params: params });
   }
+
+  getOrderDetail(numero_pedido: number){
+    const params = {
+      numero_pedido : numero_pedido
+    }
+    return this.http.get<Response>(environment.dev + 'pedidos/detail', { params: params });
+  }
 }

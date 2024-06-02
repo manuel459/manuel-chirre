@@ -1,9 +1,9 @@
-import { Body, Controller, Get, HttpStatus, Post, Put, Query, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, Put, Query, Res, UseGuards } from "@nestjs/common";
 import { Response } from 'express';
 import { UserRepository } from "../repository/UsersRepository";
 import { JwtAuthGuard } from "../jwt.AuthGuard";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { CreatePedidoObject } from "src/application/dto/CreatePedidoObject";
+import { CreatePedidoObject, getDetailPedido } from "src/application/dto/CreatePedidoObject";
 import { PedidosServices } from "src/application/services/PedidosService";
 import { ProductosRepository } from "../repository/ProductosRepository";
 import { PedidosRepository } from "../repository/PedidosRespository";
@@ -22,7 +22,14 @@ export class PedidosController {
     @UseGuards(JwtAuthGuard)
     @Get('')
     async getOrders(@Query() payload: getAllPedidosObject, @Res() res: Response){
-        const response = await this._pedidosService.getAll(payload.nro_pedido);
+        const response = await this._pedidosService.getAll(payload);
+        return res.status(response.status).json(response);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('detail')
+    async getByIdDetail(@Query() payload: getDetailPedido, @Res() res: Response){
+        const response = await this._pedidosService.getByIdDetail(payload.numero_pedido);
         return res.status(response.status).json(response);
     }
 

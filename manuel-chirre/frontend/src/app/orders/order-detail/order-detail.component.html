@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalles de Pedidos</title>
+</head>
+<body>
+  <div >
+    <h1>Detalle del Pedido</h1>
+    <h4>Numero de Pedido: {{pedido.numero_pedido}}</h4>
+    <h4>Estado:  {{pedido.estado}}</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Etiquetas</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of ordenDetail">
+          <td>{{ pedido.sku }}</td>
+          <td>{{ pedido.nombre }}</td>
+          <td>{{ pedido.tipo }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let etiqueta of pedido.etiquetas">{{ etiqueta }}</li>
+            </ul>
+          </td>
+          <td>{{ pedido.precio }}</td>
+          <td>{{ pedido.cantidad }}</td>
+          <td>{{ pedido.total }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

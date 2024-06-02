@@ -5,4 +5,16 @@ export class getAllPedidosObject {
     @ApiProperty()
     @IsOptional()
     nro_pedido: number;
+
+    @ApiProperty()
+    @IsOptional()
+    fecha_inicio: Date;
+
+    @ApiProperty()
+    @IsOptional()
+    fecha_fin:Date;
+
+    @ApiProperty()
+    @IsOptional()
+    tipo_fecha: string;
 }

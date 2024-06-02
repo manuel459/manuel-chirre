@@ -11,16 +11,17 @@ import { IProductosRepository } from "src/infraestructure/interfaces/IProductosR
 import { IUserRepository } from "src/infraestructure/interfaces/IUserRepository";
 import { IPedidosRepository } from "src/infraestructure/interfaces/IPedidosRepository";
 import { UpdateProcessStateObject } from "../dto/UpdateProcessStateObject";
+import { getAllPedidosObject } from "../dto/getAllPedidosObject";
 
 export class PedidosServices {
     constructor(private readonly _productRepository: IProductosRepository, private _userRepository: IUserRepository, private _pedidosRepository :IPedidosRepository){
 
     }
 
-    async getAll(nro_pedido: number): Promise<IResponse>{
+    async getAll(payload: getAllPedidosObject): Promise<IResponse>{
         const response = new ResponseHandler();
         try {
-            const result = await this._pedidosRepository.getAll(nro_pedido);
+            const result = await this._pedidosRepository.getAll(payload);
             return response.succest(200, 'consulta exitosa', result);
         }catch(error){
             return response.error(error.status??400, error.message);
@@ -31,7 +32,7 @@ export class PedidosServices {
         const response = new ResponseHandler();
         try {
             for(let item of create.lista_productos){
-                const product = await this._productRepository.getById(item)
+                const product = await this._productRepository.getById(item.sku)
                 if(!product) throw new HttpException('No se encontraron registros del producto', 400)
             }
             
@@ -44,16 +45,29 @@ export class PedidosServices {
             if(!repartidor) throw new HttpException('No se encontraron registros del repartidor', 404);
 
             const body = {
-                lista_productos: create.lista_productos,
                 fecha_pedido: new Date(),
                 vendedor_solicitante: create.vendedor_solicitante,
                 repartidor: create.repartidor,
                 estado: 'POR ATENDER'
             }
 
-            const insert = await this._pedidosRepository.create(body);
+            const pedido = await this._pedidosRepository.create(body);
 
-            return response.succest(200, 'Pedido registrado con exito', insert);   
+            console.log('el pedido', pedido)
+
+            if(!pedido.numero_pedido) throw new HttpException('No se registro el pedido', 404);
+
+            const createDetail = create.lista_productos;
+
+            createDetail.map( producto => {
+                producto['numero_pedido'] = pedido.numero_pedido
+            });
+
+            const idDetalle = await this._pedidosRepository.createDetail(createDetail);
+
+            if(!idDetalle) throw new HttpException('No se registro el detalle del pedido', 404);
+
+            return response.succest(200, 'Pedido registrado con exito', pedido.numero_pedido);   
         } catch (error) {
             return response.error(error.status??400, error.message);
         }
@@ -94,5 +108,16 @@ export class PedidosServices {
             return response.error(error.status??400, error.message);
         }
 
+    }
+
+    async getByIdDetail(numero_pedido: number){
+        const response = new ResponseHandler();
+        try {
+            const detail = await this._pedidosRepository.getByIdDetail(numero_pedido);
+            return response.succest(200,'consulta de detalle exitosa', detail);
+        } catch (error) {
+            console.log(error)
+            return response.error(error.status??400, error.message);
+        }
     }
 }
