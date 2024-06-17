@@ -15,19 +15,23 @@ export class AuthServices {
     async login(usuario: UserLoginDto): Promise<ResponseInterface>{
         const response = new ResponseHandler();
         try {
-            console.log('llego al servicios')
-            const user = await this.userRepository.getUser(usuario.correo);
-            console.log(user)
-            if(!user){
-                throw new HttpException('USER_NOT_FOUND', 404);
-            }
+            const context = await this.userRepository.dbContext();
+            return context.transaction(async (txr)=> {
+                console.log('llego al servicios')
+                const user = await this.userRepository.getUser(usuario.correo, txr);
+                console.log(user)
+                if(!user){
+                    throw new HttpException('USER_NOT_FOUND', 404);
+                }
 
-            const verificarPassword = await compare(usuario.password, user.password);
-            if(!verificarPassword) throw new HttpException('PASSWORD_INCORRECT', 403);
+                const verificarPassword = await compare(usuario.password, user.password);
+                if(!verificarPassword) throw new HttpException('PASSWORD_INCORRECT', 403);
 
-            const token = await this.jwtService.signAsync({id: user.id, codigotrabajador: user.codigotrabajador, correo: user.correo, nombre: user.nombre });   
-            console.log('resultando', token)
-            return response.succest(200, 'Token obtenido satisfactoriamente', { nombre: user.nombre , accessToken: token } );
+                const token = await this.jwtService.signAsync({id: user.id, codigotrabajador: user.codigotrabajador, correo: user.correo, nombre: user.nombre });   
+                console.log('resultando', token)
+                return response.succest(200, 'Token obtenido satisfactoriamente', { nombre: user.nombre , accessToken: token } );
+            })
+            
         } catch (error) {
             console.log(error);
             return response.error(error.status, error.message);

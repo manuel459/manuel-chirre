@@ -5,6 +5,9 @@ import { ProductosRepository } from "src/domain/repositories/productos.repositor
 export class PostgresqlProductosRepository implements ProductosRepository {
     constructor(@InjectKnex() private readonly knex: Knex){}
 
+    async dbContext():Promise<Knex>{
+        return this.knex;
+    }
     async getAll(sku: string, nombre: string){
         const query = this.knex('productos').select();
         if(sku && sku != 'null'){
@@ -17,7 +20,8 @@ export class PostgresqlProductosRepository implements ProductosRepository {
         return await query;
     }
 
-    async getById(SKU:string){
+    async getById(SKU:string, trx?: Knex){
+        if(trx) return await trx('productos').where('sku', SKU).first();
         return await this.knex('productos').where('sku', SKU).first();
     }
 }

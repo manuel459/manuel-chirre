@@ -36,7 +36,11 @@ export class PostgresqlPedidosRepository implements PedidosRepository {
         return await this.knex('pedidos').where('numero_pedido', id).first();
     }
 
-    async create(body){
+    async create(body, txr:Knex){
+        if(txr){
+            const insert = await txr('pedidos').insert(body).returning('numero_pedido');
+            return insert[0];
+        }
         const insert = await this.knex('pedidos').insert(body).returning('numero_pedido');
         return insert[0];
     }
@@ -45,7 +49,10 @@ export class PostgresqlPedidosRepository implements PedidosRepository {
         return await this.knex('pedidos').where('numero_pedido', id).update(body);
     }
 
-    async createDetail(body: any) {
+    async createDetail(body: any, txr?: Knex) {
+        if(txr){
+            return await txr('detalle_pedido').insert(body);
+        }
         return await this.knex('detalle_pedido').insert(body);
     }
 

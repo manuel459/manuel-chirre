@@ -8,6 +8,7 @@ import { ResponseInterface } from "src/shared/interfaces/response.interface";
 import { CreatePedidoDto } from "src/interfaces/dto/create-pedido.dto";
 import { EN_DELIVERY, EN_PROCESO, RECIBIDO, REPARTIDOR, VENDEDOR, lista_secuencia_estados } from "src/shared/constants/constantes";
 import { UpdateProcessStateDto } from "src/interfaces/dto/update-process-state.dto";
+import * as AWS from 'aws-sdk';
 
 export class PedidosServices {
     constructor(private readonly _productRepository: ProductosRepository, private _userRepository: UserRepository, private _pedidosRepository :PedidosRepository){
@@ -27,43 +28,46 @@ export class PedidosServices {
     async create(create: CreatePedidoDto): Promise<ResponseInterface>{
         const response = new ResponseHandler();
         try {
-            for(let item of create.lista_productos){
-                const product = await this._productRepository.getById(item.sku)
-                if(!product) throw new HttpException('No se encontraron registros del producto', 400)
-            }
-            
-            const vendedor = await this._userRepository.getById(create.vendedor_solicitante, VENDEDOR)
-            console.log('datos', vendedor)
-            if(!vendedor) throw new HttpException('No se encontraron registros del vendedor', 404);
+            const context = await this._productRepository.dbContext();
+            return context.transaction(async (txr) => {
+                for(let item of create.lista_productos){
+                    const product = await this._productRepository.getById(item.sku, txr)
+                    if(!product) throw new HttpException('No se encontraron registros del producto', 400)
+                }
+                
+                const vendedor = await this._userRepository.getById(create.vendedor_solicitante, VENDEDOR, txr)
+                console.log('datos', vendedor)
+                if(!vendedor) throw new HttpException('No se encontraron registros del vendedor', 404);
+    
+                const repartidor = await this._userRepository.getById(create.repartidor, REPARTIDOR, txr)
+    
+                if(!repartidor) throw new HttpException('No se encontraron registros del repartidor', 404);
+    
+                const body = {
+                    fecha_pedido: new Date(),
+                    vendedor_solicitante: create.vendedor_solicitante,
+                    repartidor: create.repartidor,
+                    estado: 'POR ATENDER'
+                }
+    
+                const pedido = await this._pedidosRepository.create(body, txr);
+    
+                console.log('el pedido', pedido)
+    
+                if(!pedido.numero_pedido) throw new HttpException('No se registro el pedido', 400);
+    
+                const createDetail = create.lista_productos;
+    
+                createDetail.map( producto => {
+                    producto['numero_pedido'] = pedido.numero_pedido
+                });
 
-            const repartidor = await this._userRepository.getById(create.repartidor, REPARTIDOR)
-
-            if(!repartidor) throw new HttpException('No se encontraron registros del repartidor', 404);
-
-            const body = {
-                fecha_pedido: new Date(),
-                vendedor_solicitante: create.vendedor_solicitante,
-                repartidor: create.repartidor,
-                estado: 'POR ATENDER'
-            }
-
-            const pedido = await this._pedidosRepository.create(body);
-
-            console.log('el pedido', pedido)
-
-            if(!pedido.numero_pedido) throw new HttpException('No se registro el pedido', 400);
-
-            const createDetail = create.lista_productos;
-
-            createDetail.map( producto => {
-                producto['numero_pedido'] = pedido.numero_pedido
-            });
-
-            const idDetalle = await this._pedidosRepository.createDetail(createDetail);
-
-            if(!idDetalle) throw new HttpException('No se registro el detalle del pedido', 400);
-
-            return response.succest(200, 'Pedido registrado con exito', pedido.numero_pedido);   
+                const idDetalle = await this._pedidosRepository.createDetail(createDetail, txr);
+    
+                if(!idDetalle) throw new HttpException('No se registro el detalle del pedido', 400);
+    
+                return response.succest(200, 'Pedido registrado con exito', pedido.numero_pedido); 
+            })
         } catch (error) {
             return response.error(error.status??400, error.message);
         }
